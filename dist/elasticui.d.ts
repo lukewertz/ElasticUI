@@ -282,6 +282,20 @@ declare module elasticui.controllers {
         private updateQuery();
     }
 }
+declare module elasticui.controllers {
+    interface ISizeScope extends IIndexScope {
+        pageSize: {
+            size: any;
+        };
+    }
+    class SizeController {
+        private scope;
+        static $inject: string[];
+        constructor($scope: ISizeScope);
+        public init(): void;
+        private updateSize();
+    }
+}
 declare module elasticui.directives {
     class HighlightDirective {
         constructor();
@@ -294,6 +308,11 @@ declare module elasticui.directives {
 }
 declare module elasticui.directives {
     class QueryDirective {
+        constructor();
+    }
+}
+declare module elasticui.directives {
+    class SizeDirective {
         constructor();
     }
 }

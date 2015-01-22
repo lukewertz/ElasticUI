@@ -1,5 +1,5 @@
-﻿**The concept of ElasticUI is to have one "view" of your index to which you can add aggregations, 
-sorting, paging, filters, highlighting by adding directives in your app. 
+﻿**The concept of ElasticUI is to have one "view" of your index to which you can add aggregations,
+sorting, paging, filters, highlighting by adding directives in your app.
 ElasticUI defines the following directives for this:**
 
 euiIndex
@@ -26,7 +26,7 @@ Creates a new inherited scope, where you can access the results of this specific
 
 **Attributes**
 
-*euiFilterSelf: boolean = true (optional)*: By default, all filters defined in the view are applied to the aggregation. 
+*euiFilterSelf: boolean = true (optional)*: By default, all filters defined in the view are applied to the aggregation.
 When setting *eui-filter-self="false"* on the *euiAggregation*, only filters are applied that are different from the aggregation field.
 This behaviour is useful for rendering a facet (e.g.: list of checkboxes), which you don't want to update after changing the facet-selection.
 
@@ -88,9 +88,16 @@ Creates a new inherited scope containing a **highlighting** object. Use the prop
 *euiEnabled (optional)*: See below
 
 
+euiSize
+---
+Allows the size parameter of the query to be defined, e.g.:
+
+    <span eui-size="20"></span>
+
+
 Attribute euiEnabled
 ---
-On directives supporting *eui-enabled* (*euiSort*, *euiFilter*, *euiQuery*, *euiHighlight*), 
+On directives supporting *eui-enabled* (*euiSort*, *euiFilter*, *euiQuery*, *euiHighlight*),
 you can use this attribute instead of manipulating *scope.(sorting|query|filter|highlight).enabled* to enable the sort/query/filter/highlight.
 
 
@@ -104,7 +111,7 @@ Combines filters defined as children (i.e.: within its scope) using a **should**
         <input type="checkbox" eui-filter="ejs.TermsFilter('field3', 'value3')" ng-model="filter.enabled">
     </div>
 
-This example would render 3 checkboxes. When all checkboxes are selected, documents matching at least one of the 3 filters will be returned. 
+This example would render 3 checkboxes. When all checkboxes are selected, documents matching at least one of the 3 filters will be returned.
 Without the euiOrFilter directive, only documents matching all selected filters would be returned.
 
 

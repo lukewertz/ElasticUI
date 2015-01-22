@@ -662,7 +662,7 @@ var elasticui;
                     index: null,
                     loading: false,
                     pageCount: 0,
-                    pageSize: 10,
+                    pageSize: null,
                     results: null,
                     refresh: function () {
                         return _this.refreshIfDocCountChanged();
@@ -695,6 +695,9 @@ var elasticui;
                     _this.search();
                 });
                 $scope.$watch('indexVM.page', function () {
+                    return _this.search();
+                });
+                $scope.$watch('indexVM.pageSize', function () {
                     return _this.search();
                 });
                 $scope.$watch('indexVM.index', function () {
@@ -746,9 +749,12 @@ var elasticui;
                     request.highlight(this.indexVM.highlight);
                 }
 
+                if (this.indexVM.pageSize != null) {
+                    request.size(this.indexVM.pageSize);
+                }
+
                 var res = this.es.client.search({
                     index: this.indexVM.index,
-                    size: this.indexVM.pageSize,
                     from: this.indexVM.pageSize * (this.indexVM.page - 1),
                     body: request
                 });
@@ -1167,6 +1173,31 @@ var elasticui;
 })(elasticui || (elasticui = {}));
 var elasticui;
 (function (elasticui) {
+    (function (controllers) {
+        var SizeController = (function () {
+            function SizeController($scope) {
+                this.scope = $scope;
+            }
+            SizeController.prototype.init = function () {
+                var _this = this;
+                this.scope.$watch('pageSize.size', function () {
+                    return _this.updateSize();
+                });
+                this.updateSize();
+            };
+
+            SizeController.prototype.updateSize = function () {
+                this.scope.indexVM.pageSize = this.scope.pageSize.size;
+            };
+            SizeController.$inject = ['$scope'];
+            return SizeController;
+        })();
+        controllers.SizeController = SizeController;
+    })(elasticui.controllers || (elasticui.controllers = {}));
+    var controllers = elasticui.controllers;
+})(elasticui || (elasticui = {}));
+var elasticui;
+(function (elasticui) {
     (function (directives) {
         var HighlightDirective = (function () {
             function HighlightDirective() {
@@ -1269,6 +1300,36 @@ var elasticui;
         })();
         directives.QueryDirective = QueryDirective;
         directives.directives.directive('euiQuery', QueryDirective);
+    })(elasticui.directives || (elasticui.directives = {}));
+    var directives = elasticui.directives;
+})(elasticui || (elasticui = {}));
+var elasticui;
+(function (elasticui) {
+    (function (directives) {
+        var SizeDirective = (function () {
+            function SizeDirective() {
+                var directive = {};
+                directive.restrict = 'A';
+                directive.scope = true;
+
+                directive.controller = elasticui.controllers.SizeController;
+                directive.link = function (scope, element, attrs, sizeCtl) {
+                    scope.$watch(element.attr('eui-size'), function (val) {
+                        return scope.pageSize.size = val;
+                    });
+
+                    scope.pageSize = {
+                        size: scope.$eval(element.attr('eui-size'))
+                    };
+
+                    sizeCtl.init();
+                };
+                return directive;
+            }
+            return SizeDirective;
+        })();
+        directives.SizeDirective = SizeDirective;
+        directives.directives.directive('euiSize', SizeDirective);
     })(elasticui.directives || (elasticui.directives = {}));
     var directives = elasticui.directives;
 })(elasticui || (elasticui = {}));

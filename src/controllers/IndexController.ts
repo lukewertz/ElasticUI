@@ -18,7 +18,7 @@ module elasticui.controllers {
             index: null,
             loading:false,
             pageCount: 0,
-            pageSize: 10,
+            pageSize: null,
             results: null,
             refresh: () => this.refreshIfDocCountChanged(),
             error: null
@@ -45,6 +45,7 @@ module elasticui.controllers {
             $scope.$watch('indexVM.host', () => { if (this.indexVM.host != null && es.setHost(this.indexVM.host)) { this.search(); } });
             $scope.$watch('indexVM.sort', () => { this.indexVM.page = 1; this.search() });
             $scope.$watch('indexVM.page', () => this.search());
+            $scope.$watch('indexVM.pageSize', () => this.search());
             $scope.$watch('indexVM.index', () => this.search());
             $scope.$watch('indexVM.query', () => this.search());
             $scope.$watch('indexVM.highlight', () => this.search());
@@ -81,11 +82,14 @@ module elasticui.controllers {
                 request.highlight(this.indexVM.highlight);
             }
 
+            if (this.indexVM.pageSize != null) {
+                request.size(this.indexVM.pageSize)
+            }
+
             //console.log("request to ES");
 
             var res = this.es.client.search({
                 index: this.indexVM.index,
-                size: this.indexVM.pageSize,
                 from: this.indexVM.pageSize * (this.indexVM.page-1),
                 body: request
             });
