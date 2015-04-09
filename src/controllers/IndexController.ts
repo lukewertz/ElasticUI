@@ -18,7 +18,7 @@ module elasticui.controllers {
             index: null,
             loading:false,
             pageCount: 0,
-            pageSize: null,
+            pageSize: 10,
             results: null,
             refresh: () => this.refreshIfDocCountChanged(),
             error: null
